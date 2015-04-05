@@ -4,24 +4,47 @@ namespace yqszxx\AlipayBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/alipay/debug", name="alipay_debug")
-     * @Template()
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $tcb = $this->container->get('alipay_tcb');
         $url = $tcb
-            ->setSubject('TestGood')
-            ->setPrice(0.01)
-            ->setNotifyUrl('http://www.itfls.com/a.php')
+            ->setSubject('ShiHongsuo')
+            ->setPrice($request->get('price'))
             ->setReturnUrl('http://www.itfls.com/a.php')
-            ->setOutTradeNo('8544601198343944')
+            ->setOutTradeNo('85446011983439'.rand(0,99))
             ->getUrl();
-        return array('url' => $url);
+        return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('url' => $url));
     }
+//
+//    /**
+//     * @Route("/alipay/notify", name="alipay_notify")
+//     * @Method("POST")
+//     * @param Request $request
+//     */
+//    public function notifyPostAction(Request $request)
+//    {
+//
+//    }
+//
+//    /**
+//     * @Route("/alipay/tcb/notify", name="alipay_notify")
+//     * @Method("GET")
+//     * @param Request $request
+//     */
+//    public function notifyGetAction(Request $request)
+//    {
+//        $tcb = $this->container->get('alipay_tcb');
+//        $tcb->setCallbackMethod('')
+//            ->handleNotify($request);
+//    }
 }
