@@ -17,6 +17,6 @@ class RequiredParameterNotSetException extends \RuntimeException
      */
     public function __construct($parameterName)
     {
-        parent::__construct('The parameter '.$parameterName.'has not been set yet. Please set all the required parameters.');
+        parent::__construct('The parameter '.$parameterName.' has not been set yet. Please set all the required parameters.');
     }
 }
