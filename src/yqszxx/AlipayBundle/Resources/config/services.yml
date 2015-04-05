@@ -1,0 +1,4 @@
+services:
+    alipay_tcb:
+        class:    yqszxx\AlipayBundle\Alipay\TradeCreateByBuyer
+        arguments: [@service_container]

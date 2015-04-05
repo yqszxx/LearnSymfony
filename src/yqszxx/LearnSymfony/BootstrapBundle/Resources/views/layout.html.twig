@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    {% stylesheets
+        '@yqszxxLearnSymfonyBootstrapBundle/Resources/public/css/bootstrap.min.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+</head>
+<body>
+
+{% block body %}
+<h1>yqszxxBootstrap~</h1>
+{% endblock body %}
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+{% javascripts
+    '@yqszxxLearnSymfonyBootstrapBundle/Resources/public/js/bootstrap.min.js'
+%}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+</body>
+</html>
