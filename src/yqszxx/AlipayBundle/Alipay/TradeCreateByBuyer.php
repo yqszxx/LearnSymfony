@@ -39,15 +39,15 @@ class TradeCreateByBuyer extends ContainerAware
             //基本参数
             'service'               =>          'trade_create_by_buyer', //接口名称
             'partner'               =>          strtolower(trim($this->container->getParameter('alipay_partner'))), //合作身份者ID，从Parameter中获取
-            '_input_charset'        =>          'utf-8', //参数编码字符集
+            '_input_charset'        =>          'UTF-8', //参数编码字符集
             'notify_url'            =>          null, //服务器异步通知页面路径
             'return_url'            =>          null, //页面跳转同步通知页面路径
             //业务参数
             'out_trade_no'          =>          null, //商户网站唯一订单号
             'subject'               =>          null, //商品名称
-            'payment_type'          =>          1, //收款类型（只支持 1:商品购买）
-            'logistics_type'        =>          'post', //物流类型（平邮）
-            'logistics_fee'         =>          0, //物流费用
+            'payment_type'          =>          '1', //收款类型（只支持 1:商品购买）
+            'logistics_type'        =>          'POST', //物流类型（快递）
+            'logistics_fee'         =>          0.00, //物流费用
             'logistics_payment'     =>          'SELLER_PAY', //物流支付类型（卖家支付）
             'seller_email'          =>          strtolower(trim($this->container->getParameter('alipay_seller_email'))), //卖家支付宝账号，从Parameter中获取
             'price'                 =>          null, //商品单价
@@ -117,12 +117,13 @@ class TradeCreateByBuyer extends ContainerAware
 
     /**
      * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @param bool $isUrl 是否进行Url编码
      * @return string 拼接完成以后的字符串
      */
-    protected function getLinkString() {
+    protected function getLinkString($isUrl = false) {
         $linkString = '';
         foreach ($this->parameters as $key => $value) {
-            $linkString.=$key.'='.$value.'&';
+            $linkString.=$key.'='.($isUrl ? urlencode($value) : $value).'&';
         }
         //去掉最后一个&字符
         $linkString = substr($linkString,0,count($linkString)-2);
@@ -139,8 +140,8 @@ class TradeCreateByBuyer extends ContainerAware
         ksort($this->parameters);
 
         foreach($this->parameters as $key => $value){
-            if($key == "sign" || $key == "sign_type" || $value == ""){
-                reset($this->parameters[$key]);
+            if($key == "sign" || $key == "sign_type" || $value === null){
+                unset($this->parameters[$key]);
             }
         }
 
@@ -151,9 +152,9 @@ class TradeCreateByBuyer extends ContainerAware
             'subject',
             'price',
         );
-        foreach($this->parameters as $key => $value){
-            if(!in_array($key, $neededParameters)){
-                throw new RequiredParameterNotSetException($key);
+        foreach($neededParameters as $value){
+            if(!array_key_exists($value, $this->parameters)){
+                throw new RequiredParameterNotSetException($value);
             }
         }
 
@@ -185,6 +186,6 @@ class TradeCreateByBuyer extends ContainerAware
      */
     public function getUrl() {
         $this->processParameters()->signParameters();
-        return $this::alipay_gateway.urlencode($this->getLinkString());
+        return $this::alipay_gateway.$this->getLinkString(true);
     }
 }
