@@ -5,46 +5,48 @@ namespace yqszxx\AlipayBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use yqszxx\AlipayBundle\Entity\Logs;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/alipay/debug", name="alipay_debug")
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function debugAction()
     {
         $tcb = $this->container->get('alipay_tcb');
         $url = $tcb
-            ->setSubject('ShiHongsuo')
-            ->setPrice($request->get('price'))
-            ->setReturnUrl('http://www.itfls.com/a.php')
-            ->setOutTradeNo('85446011983439'.rand(0,99))
-            ->getUrl();
-        return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('url' => $url));
+            ->setRequestSubject('yqTestGood')
+            ->setRequestPrice('0.01')
+            ->setRequestReturnUrl($this->generateUrl('alipay_return', array(), true))
+            ->setRequestOutTradeNo('1403021999052612')
+            ->getRequestUrl();
+        return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('content' => $url));
     }
-//
-//    /**
-//     * @Route("/alipay/notify", name="alipay_notify")
-//     * @Method("POST")
-//     * @param Request $request
-//     */
-//    public function notifyPostAction(Request $request)
-//    {
-//
-//    }
-//
-//    /**
-//     * @Route("/alipay/tcb/notify", name="alipay_notify")
-//     * @Method("GET")
-//     * @param Request $request
-//     */
-//    public function notifyGetAction(Request $request)
-//    {
-//        $tcb = $this->container->get('alipay_tcb');
-//        $tcb->setCallbackMethod('')
-//            ->handleNotify($request);
-//    }
+
+    /**
+     * @Route("/alipay/notify", name="alipay_notify")
+     * @param Request $request
+     */
+    public function notifyAction()
+    {
+        $logs = new Logs();
+        $tcb = $this->get('alipay_tcb');
+        $tradeNo = 'AliTN='.$tcb->handleNotify($request)->getNotifyTradeNo().' YqTN='.$tcb->getNotifyOutTradeNo();
+        $tradeStatus = $tcb->getNotifyTradeStatus();
+        $logs->setTradeNo($tradeNo)->setTradeStatus($tradeStatus);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($logs);
+        $em->flush();
+
+    }
+
+    /**
+     * @Route("/alipay/return", name="alipay_return")
+     * @param Request $request
+     */
+    public function notifyGetAction(Request $request)
+    {
+        return $this->render('yqszxxAlipayBundle:Default:index.html.twig');
+    }
 }

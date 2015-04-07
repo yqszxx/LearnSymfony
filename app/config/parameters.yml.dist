@@ -23,4 +23,3 @@ parameters:
     alipay_seller_email:    ~
     alipay_key:             ~
     alipay_sign_type:       md5
-    alipay_callback_method: ~
