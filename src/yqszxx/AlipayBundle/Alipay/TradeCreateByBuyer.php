@@ -478,7 +478,7 @@ class TradeCreateByBuyer
             throw new MethodNotAllowedHttpException(array('POST'));
         }
 
-        $this->notifyParameters = $request->query->all();
+        $this->notifyParameters = $request->request->all();
 
         $originalNotifySign = $this->notifyParameters['sign'];
         $this->signType = $this->notifyParameters['sign_type'];
