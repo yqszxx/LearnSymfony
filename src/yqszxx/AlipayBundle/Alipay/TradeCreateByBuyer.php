@@ -370,7 +370,6 @@ class TradeCreateByBuyer
         $linkString = '';
         foreach ($parameters as $key => $value) {
             $linkString.=$key.'='.($isUrl ? urlencode($value) : $value).'&';
-            dump($linkString);
         }
         //去掉最后一个&字符
         $linkString = substr($linkString,0,count($linkString)-2);
