@@ -24,16 +24,16 @@ class Logs
     /**
      * @var string
      *
-     * @ORM\Column(name="trade_no", type="string", length=255)
+     * @ORM\Column(name="tradeNo", type="string", length=255)
      */
     private $tradeNo;
 
     /**
-     * @var string
+     * @var \stdClass
      *
-     * @ORM\Column(name="trade_status", type="string", length=255)
+     * @ORM\Column(name="object", type="object")
      */
-    private $tradeStatus;
+    private $object;
 
 
     /**
@@ -70,25 +70,25 @@ class Logs
     }
 
     /**
-     * Set tradeStatus
+     * Set object
      *
-     * @param string $tradeStatus
+     * @param \stdClass $object
      * @return Logs
      */
-    public function setTradeStatus($tradeStatus)
+    public function setObject($object)
     {
-        $this->tradeStatus = $tradeStatus;
+        $this->object = $object;
 
         return $this;
     }
 
     /**
-     * Get tradeStatus
+     * Get object
      *
-     * @return string 
+     * @return \stdClass 
      */
-    public function getTradeStatus()
+    public function getObject()
     {
-        return $this->tradeStatus;
+        return $this->object;
     }
 }

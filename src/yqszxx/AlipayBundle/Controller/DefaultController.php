@@ -28,13 +28,12 @@ class DefaultController extends Controller
      * @Route("/alipay/notify", name="alipay_notify")
      * @param Request $request
      */
-    public function notifyAction()
+    public function notifyAction(Request $request)
     {
         $logs = new Logs();
         $tcb = $this->get('alipay_tcb');
-        $tradeNo = 'AliTN='.$tcb->handleNotify($request)->getNotifyTradeNo().' YqTN='.$tcb->getNotifyOutTradeNo();
-        $tradeStatus = $tcb->getNotifyTradeStatus();
-        $logs->setTradeNo($tradeNo)->setTradeStatus($tradeStatus);
+        $tradeNo = 'AliTN='.$tcb->handleNotify($request)->getNotifyTradeNo().' YqTN='.$tcb->getNotifyOutTradeNo().' err='.$tcb->getError();
+        $logs->setTradeNo($tradeNo)->setObject($tcb);
         $em = $this->getDoctrine()->getManager();
         $em->persist($logs);
         $em->flush();
