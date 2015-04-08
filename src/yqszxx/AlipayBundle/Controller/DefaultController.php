@@ -6,8 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use yqszxx\AlipayBundle\Entity\logs;
-use yqszxx\AlipayBundle\Entity\logsRepository;
+use yqszxx\AlipayBundle\Entity\yqlogs;
 
 class DefaultController extends Controller
 {
@@ -32,7 +31,7 @@ class DefaultController extends Controller
      */
     public function notifyAction(Request $request)
     {
-        $logs = new logs();
+        $logs = new yqlogs();
         $logs->setArray($request->request->all());
 //        $tcb = $this->get('alipay_tcb');
 //        $tcb->handleNotify($request)->getError();

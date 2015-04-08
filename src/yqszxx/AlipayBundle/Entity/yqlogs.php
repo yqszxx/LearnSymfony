@@ -5,12 +5,12 @@ namespace yqszxx\AlipayBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * logs
+ * yqlogs
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class logs
+class yqlogs
 {
     /**
      * @var integer
