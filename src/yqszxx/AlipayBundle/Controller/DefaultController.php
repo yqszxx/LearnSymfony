@@ -5,7 +5,9 @@ namespace yqszxx\AlipayBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use yqszxx\AlipayBundle\Entity\Logs;
+use Symfony\Component\HttpFoundation\Response;
+use yqszxx\AlipayBundle\Entity\logs;
+use yqszxx\AlipayBundle\Entity\logsRepository;
 
 class DefaultController extends Controller
 {
@@ -18,8 +20,7 @@ class DefaultController extends Controller
         $url = $tcb
             ->setRequestSubject('yqTestGood')
             ->setRequestPrice('0.01')
-            ->setRequestReturnUrl($this->generateUrl('alipay_return', array(), true))
-            ->setRequestOutTradeNo('1403021999052612')
+            ->setRequestOutTradeNo('1403021999052'.rand(100,999))
             ->getRequestUrl();
         return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('content' => $url));
     }
@@ -27,24 +28,27 @@ class DefaultController extends Controller
     /**
      * @Route("/alipay/notify", name="alipay_notify")
      * @param Request $request
+     * @return Response
      */
     public function notifyAction(Request $request)
     {
-        $logs = new Logs();
-        $tcb = $this->get('alipay_tcb');
-        $tradeNo = 'AliTN='.$tcb->handleNotify($request)->getNotifyTradeNo().' YqTN='.$tcb->getNotifyOutTradeNo().' err='.$tcb->getError();
-        $logs->setTradeNo($tradeNo)->setObject($tcb);
+        $logs = new logs();
+        $logs->setArray($request->request->all());
+//        $tcb = $this->get('alipay_tcb');
+//        $tcb->handleNotify($request)->getError();
         $em = $this->getDoctrine()->getManager();
         $em->persist($logs);
         $em->flush();
+
+        return new Response('success');
 
     }
 
     /**
      * @Route("/alipay/return", name="alipay_return")
-     * @param Request $request
+     * @return Response
      */
-    public function notifyGetAction(Request $request)
+    public function notifyGetAction()
     {
         return $this->render('yqszxxAlipayBundle:Default:index.html.twig');
     }

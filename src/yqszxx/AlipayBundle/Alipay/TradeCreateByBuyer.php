@@ -100,7 +100,7 @@ class TradeCreateByBuyer
             'partner'               =>          $this->partner, //合作身份者 ID
             '_input_charset'        =>          'UTF-8', //参数编码字符集
             'notify_url'            =>          $this->container->get('router')->generate('alipay_notify',array(),true), //服务器异步通知页面路径
-            'return_url'            =>          null, //页面跳转同步通知页面路径
+            'return_url'            =>          $this->container->get('router')->generate('alipay_return', array(), true), //页面跳转同步通知页面路径
             //业务参数
             'out_trade_no'          =>          null, //商户网站唯一订单号
             'subject'               =>          null, //商品名称
@@ -134,7 +134,7 @@ class TradeCreateByBuyer
      * @param $methodName string 需要传入魔术常量__FUNCTION__
      */
     protected function requireModeIsNotRequest($methodName){
-        if($this->mode != 2 || $this->mode != 3){
+        if($this->mode == 1){
             throw new \BadMethodCallException('You can only call the '.$methodName.'() method when handling a notify or a return!');
         }
     }
@@ -315,19 +315,6 @@ class TradeCreateByBuyer
     }
 
     /**
-     * 设置请求时的同步通知页面路径
-     * @param string $returnUrl 要设置为的同步通知页面路径
-     * @return $this
-     * @deprecated 即将被内部的链接生成系统替代
-     */
-    public function setRequestReturnUrl($returnUrl)
-    {
-        $this->requireModeIsRequest(__FUNCTION__);
-        $this->requestParameters['return_url'] = $returnUrl;
-        return $this;
-    }
-
-    /**
      * 设置请求时的商户订单号
      * @param string $outTradeNo 要设置为的商户订单号
      * @return $this
@@ -470,7 +457,7 @@ class TradeCreateByBuyer
      * @param Request $request 需要传入Request对象
      * @return $this
      */
-    public function handleNotify(Request $request){
+    public function handleNotify($request){
         $this->requireModeIsNotify(__FUNCTION__);
         $this->notifyResponse = new Response();
 
