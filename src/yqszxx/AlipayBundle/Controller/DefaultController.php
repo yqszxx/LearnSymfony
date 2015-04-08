@@ -39,7 +39,7 @@ class DefaultController extends Controller
         $em->persist($logs);
         $em->flush();
 
-        return new Response('success');
+        return new Response('succ-ess');
 
     }
 
