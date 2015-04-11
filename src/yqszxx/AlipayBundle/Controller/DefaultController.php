@@ -55,7 +55,7 @@ class DefaultController extends Controller
      */
     public function notifyGetAction(Request $request)
     {
-        dump($request->query->all());
+//        dump($request->query->all());
         return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('content'=>'ok'));
     }
 }
