@@ -32,7 +32,7 @@ class TradeCreateByBuyerNotifyHandler extends TradeCreateByBuyerBase
         if(self::getSignature(
                 $parameters,$this->config['key'],$signType
             ) != $originalSign){ //数据加密校验不符
-            return new TradeCreateByBuyerNotifyResult(null,false,1);
+            return new TradeCreateByBuyerNotifyResult(array(),false,1);
         }
 
         $httpClient = new Client();
@@ -46,7 +46,7 @@ class TradeCreateByBuyerNotifyHandler extends TradeCreateByBuyerBase
             )
                 ->getBody()
                 ->getContents() != 'true'){ //验证请求真实性失败
-            return new TradeCreateByBuyerNotifyResult(null,false,2);
+            return new TradeCreateByBuyerNotifyResult(array(),false,2);
         }
 
         return new TradeCreateByBuyerNotifyResult($parameters,true,0);
