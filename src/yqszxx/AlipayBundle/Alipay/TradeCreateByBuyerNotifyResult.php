@@ -19,7 +19,7 @@ class TradeCreateByBuyerNotifyResult {
     {
         $this->parameters = $parameters;
         $this->code = $code;
-        $this->response = new Response(($success ? 'success' : 'failure'));
+        $this->response = new Response(($success ? 'success' : '<html>failure</html>'));
     }
 
     /**

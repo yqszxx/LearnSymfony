@@ -36,11 +36,11 @@ class DefaultController extends Controller
     public function notifyAction(Request $request)
     {
         $logs = new yqlogs();
-//        $tcb = $this->get('alipay_tcb');
-//        $result = $tcb->getNotifyHandler()->handle($request);
-//        $code = $result->getCode();
-//        $content = $result->getParameters();
-        $logs->setArray($request->request->all());
+        $tcb = $this->get('alipay_tcb');
+        $result = $tcb->getNotifyHandler()->handle($request);
+        $code = $result->getCode();
+        $content = $result->getParameters();
+        $logs->setArray(array('code' => $code,'request'=>$request,'result'=>$content));
         $em = $this->getDoctrine()->getManager();
         $em->persist($logs);
         $em->flush();

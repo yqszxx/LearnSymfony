@@ -37,12 +37,7 @@ class TradeCreateByBuyerNotifyHandler extends TradeCreateByBuyerBase
 
         $httpClient = new Client();
         if($httpClient->get(
-                $this::ALIPAY_GATEWAY,
-                array(
-                    'service'           =>  'notify_verify',
-                    'partner'           =>  $this->config['partner'],
-                    'notify_id'         =>  $parameters['notify_id'],
-                    )
+                self::ALIPAY_GATEWAY.'service=notify_verify&partner='.$this->config['partner'].'&notify_id='.$parameters['notify_id']
             )
                 ->getBody()
                 ->getContents() != 'true'){ //验证请求真实性失败
