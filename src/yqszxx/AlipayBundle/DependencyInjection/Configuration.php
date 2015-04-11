@@ -18,11 +18,16 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('yqszxx_alipay');
+        $rootNode = $treeBuilder->root('alipay');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->integerNode('partner')->cannotBeEmpty()->end()
+                ->scalarNode('key')->cannotBeEmpty()->end()
+                ->scalarNode('seller_email')->cannotBeEmpty()->end()
+                ->enumNode('sign_type')->values(array('MD5','DSA','RSA'))->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

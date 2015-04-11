@@ -16,11 +16,15 @@ class DefaultController extends Controller
     public function debugAction()
     {
         $tcb = $this->container->get('alipay_tcb');
-        $url = $tcb
-            ->setRequestSubject('yqTestGood')
-            ->setRequestPrice('0.01')
-            ->setRequestOutTradeNo('1403021999052'.rand(100,999))
-            ->getRequestUrl();
+        $requestBuilder = $tcb->getRequestBuilder();
+        $parameters = $requestBuilder->getParametersBuilder();
+        $parameters
+            ->setOutTradeNo('1403021999052'.rand(100,999))
+            ->setPrice('0.01')
+            ->setSubject('yqgoods')
+            ->setNotifyUrl($this->generateUrl('alipay_notify',null,true))
+            ->setReturnUrl($this->generateUrl('alipay_return',null,true));
+        $url = $requestBuilder->buildUrl($parameters);
         return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('content' => $url));
     }
 
@@ -32,14 +36,16 @@ class DefaultController extends Controller
     public function notifyAction(Request $request)
     {
         $logs = new yqlogs();
-        $logs->setArray($request->request->all());
-//        $tcb = $this->get('alipay_tcb');
-//        $tcb->handleNotify($request)->getError();
+        $tcb = $this->get('alipay_tcb');
+        $result = $tcb->getNotifyHandler()->handle($request);
+        $code = $result->getCode();
+        $content = $result->getParameters();
+        $logs->setArray(array('code' => $code,'request'=>$request,'result'=>$content));
         $em = $this->getDoctrine()->getManager();
         $em->persist($logs);
         $em->flush();
 
-        return new Response('succ-ess');
+        return $result->getResponse();
 
     }
 
@@ -47,8 +53,9 @@ class DefaultController extends Controller
      * @Route("/alipay/return", name="alipay_return")
      * @return Response
      */
-    public function notifyGetAction()
+    public function notifyGetAction(Request $request)
     {
-        return $this->render('yqszxxAlipayBundle:Default:index.html.twig');
+        dump($request->query->all());
+        return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('content'=>'ok'));
     }
 }

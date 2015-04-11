@@ -21,6 +21,10 @@ class yqszxxAlipayExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+        $container->setParameter('alipay.partner',$config['partner']);
+        $container->setParameter('alipay.seller_email',$config['seller_email']);
+        $container->setParameter('alipay.key',$config['key']);
+        $container->setParameter('alipay.sign_type',$config['sign_type']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

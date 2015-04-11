@@ -101,3 +101,9 @@ fos_user:
 
     service:
         user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+
+yqszxx_alipay:
+    partner:      "%alipay_partner%"
+    seller_email: "%alipay_seller_email%"
+    key:          "%alipay_key%"
+    sign_type:    "%alipay_sign_type%"
