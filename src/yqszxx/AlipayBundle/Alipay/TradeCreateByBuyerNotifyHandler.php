@@ -30,7 +30,7 @@ class TradeCreateByBuyerNotifyHandler extends TradeCreateByBuyerBase
         $parameters = self::processParameters($parameters);
 
         if(self::getSignature(
-                self::getLinkString($parameters),$this->config['key'],$signType
+                $parameters,$this->config['key'],$signType
             ) != $originalSign){ //数据加密校验不符
             return new TradeCreateByBuyerNotifyResult(null,false,1);
         }
