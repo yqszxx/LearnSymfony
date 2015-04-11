@@ -22,8 +22,8 @@ class DefaultController extends Controller
             ->setOutTradeNo('1403021999052'.rand(100,999))
             ->setPrice('0.01')
             ->setSubject('yqgoods')
-            ->setNotifyUrl($this->generateUrl('alipay_notify',null,true))
-            ->setReturnUrl($this->generateUrl('alipay_return',null,true));
+            ->setNotifyUrl($this->generateUrl('alipay_notify',array(),true))
+            ->setReturnUrl($this->generateUrl('alipay_return',array(),true));
         $url = $requestBuilder->buildUrl($parameters);
         return $this->render('yqszxxAlipayBundle:Default:index.html.twig',array('content' => $url));
     }
